@@ -1,10 +1,9 @@
-import DrumMachine from './components/DrumMachine';
-import PowerToggle from './components/PowerToggle';
+import DrumPad from './components/DrumPad';
 
 function App() {
   return (
     <div id='drum-machine'>
-      <DrumMachine />
+      <DrumPad />
     </div>
   );
 }

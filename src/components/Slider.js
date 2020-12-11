@@ -1,9 +1,18 @@
 import React from 'react';
 
-function Slider() {
+function Slider({ value, setValue }) {
   return (
-    <div>
-      <p>Slider</p>
+    <div className='slidecontainer'>
+      <input
+        min={0}
+        max={100}
+        type='range'
+        value={value}
+        onChange={setValue}
+        className='slider'
+        id='myRange'
+      />
+      <p>Slider Value: {value}</p>
     </div>
   );
 }

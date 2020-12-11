@@ -1,14 +1,16 @@
-import React, { useState, useRef, useEffect, createRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { bankOne, bankTwo } from '../soundbank';
 import PowerToggle from './PowerToggle';
 import ModeToggle from './ModeToggle';
+import Slider from './Slider';
 
 function DrumPad() {
-  const [audio, setAudio] = useState('');
-  const [index, setIndex] = useState(0);
+  //App States
   const [data, setData] = useState(bankOne);
   const [isPowerOn, setIsPowerOn] = useState(true);
   const [changeMode, setChangeMode] = useState(true);
+  const [volume, setVolume] = useState(50);
+  const [display, setDisplay] = useState('');
 
   const audioRef = useRef([]);
 
@@ -30,10 +32,6 @@ function DrumPad() {
     if (isPowerOn) {
       //get the current audio file
       const currentAudio = audioRef.current[index];
-      //set the audio
-      setAudio(currentAudio);
-      //set the index
-      setIndex(index);
       //play the audio
       playAudio(currentAudio);
     }
@@ -56,25 +54,25 @@ function DrumPad() {
       }
 
       if (currentAudio) {
-        setAudio(currentAudio);
-        //console.log(currentAudio);
         //play audio
         playAudio(currentAudio);
 
         //Get the index of the current audio file in the data
-        let index = data
+        const index = data
           .map((item) => item.keyTrigger)
           .indexOf(currentAudio.id);
 
-        //Set the index
-        setIndex(index);
+        setDisplay(data[index].id);
       } else {
+        setDisplay('Wrong key');
         console.log('Audio Not Found for the key pressed ' + currentAudio);
       }
     }
   };
 
+  //handle audio source toggle
   const onChange = () => {
+    //On toggle Change the audio source
     if (changeMode) {
       setData(bankTwo);
     } else {
@@ -83,14 +81,38 @@ function DrumPad() {
     setChangeMode(!changeMode);
   };
 
+  //Handle Volume Change
+  const handleVolumeChange = (e) => {
+    setVolume(e.target.value);
+
+    //Adjust Volume
+    audioRef.current.map((audio) => {
+      if (volume / 100 === 0.1) {
+        return setVolume(0);
+      } else {
+        return (audio.volume = volume / 100);
+      }
+    });
+  };
+
+  //Handle Power Change
+  const handlePowerChange = () => {
+    setIsPowerOn(!isPowerOn);
+    if (isPowerOn) {
+      setDisplay('POWER OFF');
+    } else {
+      setDisplay('POWER ON');
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('keydown', playOnKeyDown);
+    audioRef.current.map((audio) => (audio.volume = volume / 100));
     return () => window.removeEventListener('keydown', playOnKeyDown);
   });
 
   return (
     <div className='drumpad-container'>
-      <ModeToggle changeMode={changeMode} setChangeMode={onChange} />
       <p>DrumPad</p>
       {data.map(({ keyCode, keyTrigger, url }, index) => {
         return (
@@ -108,10 +130,10 @@ function DrumPad() {
           </div>
         );
       })}
-      <PowerToggle
-        isPowerOn={isPowerOn}
-        setIsPowerOn={() => setIsPowerOn(!isPowerOn)}
-      />
+      <h1>{display}</h1>
+      <ModeToggle changeMode={changeMode} setChangeMode={onChange} />
+      <PowerToggle isPowerOn={isPowerOn} setIsPowerOn={handlePowerChange} />
+      <Slider value={volume} setValue={handleVolumeChange} />
     </div>
   );
 }
