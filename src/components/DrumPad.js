@@ -1,19 +1,26 @@
 import React, { useState, useRef, useEffect, createRef } from 'react';
 import { bankOne, bankTwo } from '../soundbank';
 import PowerToggle from './PowerToggle';
+import ModeToggle from './ModeToggle';
 
 function DrumPad() {
-  const playRef = useRef(bankOne.map(() => createRef()));
-
   const [audio, setAudio] = useState('');
   const [index, setIndex] = useState(0);
   const [data, setData] = useState(bankOne);
   const [isPowerOn, setIsPowerOn] = useState(true);
   const [changeMode, setChangeMode] = useState(true);
 
+  const audioRef = useRef([]);
+
   //Play an Audio file
   const playAudio = (audio) => {
+    //reset the audiio play
     audio.currentTime = 0;
+
+    //Reload the audio when source changes
+    audio.load();
+
+    //play the audio
     audio.play();
   };
 
@@ -22,14 +29,11 @@ function DrumPad() {
     e.preventDefault();
     if (isPowerOn) {
       //get the current audio file
-      const currentAudio = playRef.current[index].current;
-
+      const currentAudio = audioRef.current[index];
       //set the audio
       setAudio(currentAudio);
-
       //set the index
       setIndex(index);
-
       //play the audio
       playAudio(currentAudio);
     }
@@ -38,20 +42,22 @@ function DrumPad() {
   //play the audio file on key down
   const playOnKeyDown = (e) => {
     e.preventDefault();
+    // console.log(data);
 
     if (isPowerOn) {
       let currentAudio = null;
       //loop through the audio files
-      for (let i = 0; i < playRef.current.length; i++) {
+      for (let i = 0; i < audioRef.current.length; i++) {
         //Get the current keyboard key clicked char and ge the current audio file
-        if (e.key.toUpperCase() === playRef.current[i].current.id) {
-          currentAudio = playRef.current[i].current;
+        if (e.key.toUpperCase() === audioRef.current[i].id) {
+          currentAudio = audioRef.current[i];
         }
+        //  console.log(audioRef.current[0].current);
       }
 
       if (currentAudio) {
         setAudio(currentAudio);
-
+        //console.log(currentAudio);
         //play audio
         playAudio(currentAudio);
 
@@ -68,6 +74,15 @@ function DrumPad() {
     }
   };
 
+  const onChange = () => {
+    if (changeMode) {
+      setData(bankTwo);
+    } else {
+      setData(bankOne);
+    }
+    setChangeMode(!changeMode);
+  };
+
   useEffect(() => {
     window.addEventListener('keydown', playOnKeyDown);
     return () => window.removeEventListener('keydown', playOnKeyDown);
@@ -75,6 +90,7 @@ function DrumPad() {
 
   return (
     <div className='drumpad-container'>
+      <ModeToggle changeMode={changeMode} setChangeMode={onChange} />
       <p>DrumPad</p>
       {data.map(({ keyCode, keyTrigger, url }, index) => {
         return (
@@ -82,7 +98,7 @@ function DrumPad() {
             <audio
               className='clip'
               id={keyTrigger}
-              ref={playRef.current[index]}
+              ref={(element) => (audioRef.current[index] = element)}
             >
               <source src={url} type='audio/mpeg' />
             </audio>
