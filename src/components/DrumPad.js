@@ -16,11 +16,12 @@ function DrumPad() {
 
   //Play an Audio file
   const playAudio = (audio) => {
-    //reset the audiio play
-    audio.currentTime = 0;
-
     //Reload the audio when source changes
     audio.load();
+
+    //reset the audiio play
+    audio.pause();
+    audio.currentTime = 0;
 
     //play the audio
     audio.play();
@@ -34,6 +35,9 @@ function DrumPad() {
       const currentAudio = audioRef.current[index];
       //play the audio
       playAudio(currentAudio);
+
+      //set the display text
+      setDisplay(data[index].id);
     }
   };
 
@@ -42,6 +46,7 @@ function DrumPad() {
     e.preventDefault();
     // console.log(data);
 
+    //console.log(e.target.toggleClass('active'));
     if (isPowerOn) {
       let currentAudio = null;
       //loop through the audio files
@@ -56,13 +61,24 @@ function DrumPad() {
       if (currentAudio) {
         //play audio
         playAudio(currentAudio);
-
+        let btns = Array.from(
+          e.currentTarget.document.querySelectorAll('button')
+        );
         //Get the index of the current audio file in the data
         const index = data
           .map((item) => item.keyTrigger)
           .indexOf(currentAudio.id);
 
+        //set Display text
         setDisplay(data[index].id);
+
+        //Add an acvtive class on key down
+        btns[index].classList.add('active');
+
+        //remove the active class after 100ms
+        setTimeout(() => {
+          btns[index].classList.remove('active');
+        }, 100);
       } else {
         setDisplay('Wrong key');
         console.log('Audio Not Found for the key pressed ' + currentAudio);
@@ -75,8 +91,10 @@ function DrumPad() {
     //On toggle Change the audio source
     if (changeMode) {
       setData(bankTwo);
+      setDisplay('Smooth Paino Kit');
     } else {
       setData(bankOne);
+      setDisplay('Heater Kit');
     }
     setChangeMode(!changeMode);
   };
@@ -112,25 +130,34 @@ function DrumPad() {
   });
 
   return (
-    <div className='drumpad-container'>
-      <p>DrumPad</p>
-      {data.map(({ keyCode, keyTrigger, url }, index) => {
-        return (
-          <div key={keyCode}>
-            <audio
-              className='clip'
-              id={keyTrigger}
-              ref={(element) => (audioRef.current[index] = element)}
-            >
-              <source src={url} type='audio/mpeg' />
-            </audio>
-            <button id={keyTrigger} onClick={(e) => playOnClick(index, e)}>
-              {keyTrigger}
-            </button>
-          </div>
-        );
-      })}
-      <h1>{display}</h1>
+    <div id='drum-machine'>
+      <h1 className='title'>DRUM MACHINE</h1>
+      <div className='btn-container'>
+        {data.map(({ keyCode, keyTrigger, url }, index) => {
+          return (
+            <div key={keyCode}>
+              <audio
+                className='clip'
+                id={keyTrigger}
+                ref={(element) => (audioRef.current[index] = element)}
+              >
+                <source src={url} type='audio/mpeg' />
+              </audio>
+              <button
+                className='drum-pad'
+                id={keyTrigger}
+                onClick={(e) => playOnClick(index, e)}
+              >
+                {keyTrigger}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <div id='display'>
+        <p>{display}</p>
+      </div>
+
       <ModeToggle changeMode={changeMode} setChangeMode={onChange} />
       <PowerToggle isPowerOn={isPowerOn} setIsPowerOn={handlePowerChange} />
       <Slider value={volume} setValue={handleVolumeChange} />

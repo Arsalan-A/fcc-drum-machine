@@ -3,6 +3,7 @@ import React from 'react';
 function Slider({ value, setValue }) {
   return (
     <div className='slidecontainer'>
+      <label htmlFor='myRange'>VOLUME: {value}</label>
       <input
         min={0}
         max={100}
@@ -12,7 +13,6 @@ function Slider({ value, setValue }) {
         className='slider'
         id='myRange'
       />
-      <p>Slider Value: {value}</p>
     </div>
   );
 }

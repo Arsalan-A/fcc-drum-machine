@@ -1,31 +1,33 @@
 import React from 'react';
-import '../PowerToggle.css';
+import '../modeToggle.css';
+import { CgPiano } from 'react-icons/cg';
+import { GiDrum } from 'react-icons/gi';
 
 function ModeToggle({ changeMode, setChangeMode }) {
   return (
-    <>
-      <p>Mode Toggle</p>
+    <div className='modeToggle'>
+      <label htmlFor='toggle'>MODE</label>
       <input
         onChange={setChangeMode}
         checked={changeMode}
         type='checkbox'
-        className='powerToggle-checkbox'
+        className='modeToggle-checkbox'
         id={`mode-toggle`}
       />
       <label
-        style={{ background: changeMode && '#06D6A0' }}
-        className='powerToggle-label'
+        style={{ background: changeMode && '#5ebacc' }}
+        className='modeToggle-label'
         htmlFor={`mode-toggle`}
       >
-        <span className='powerToggle-btn' />
+        <span className='modeToggle-btn' />
         <span
-          style={{ left: !changeMode && '55px' }}
-          className='powerToggle-status'
+          style={{ left: !changeMode && '38px' }}
+          className='modeToggle-status'
         >
-          {changeMode ? 'ON' : 'OFF'}
+          {changeMode ? <GiDrum /> : <CgPiano />}
         </span>
       </label>
-    </>
+    </div>
   );
 }
 

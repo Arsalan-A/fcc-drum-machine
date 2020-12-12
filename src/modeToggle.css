@@ -1,23 +1,23 @@
-.powerToggle-checkbox {
+.modeToggle-checkbox {
   height: 0;
   width: 0;
   visibility: hidden;
 }
 
-.powerToggle-label {
+.modeToggle-label {
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
   width: 70px;
   height: 34px;
-  background: grey;
+  background: #5ebacc;
   border-radius: 100px;
   position: relative;
   transition: background-color 0.2s;
 }
 
-.powerToggle-label .powerToggle-btn {
+.modeToggle-label .modeToggle-btn {
   content: '';
   position: absolute;
   top: 2px;
@@ -30,16 +30,16 @@
   box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
 }
 
-.powerToggle-checkbox:checked + .powerToggle-label .powerToggle-btn {
+.modeToggle-checkbox:checked + .modeToggle-label .modeToggle-btn {
   left: calc(100% - 2px);
   transform: translateX(-100%);
 }
 
-.powerToggle-label:active .powerToggle-btn {
+.modeToggle-label:active .modeToggle-btn {
   width: 35px;
 }
 
-.powerToggle-status {
+.modeToggle-status {
   position: absolute;
   left: 15px;
   color: #fff;
@@ -47,6 +47,6 @@
   z-index: 1;
 }
 
-.powerToggle-btn {
+.modeToggle-btn {
   z-index: 0;
 }
