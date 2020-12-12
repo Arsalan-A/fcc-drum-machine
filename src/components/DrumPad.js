@@ -136,18 +136,17 @@ function DrumPad() {
         {data.map(({ keyCode, keyTrigger, url }, index) => {
           return (
             <div key={keyCode}>
-              <audio
-                className='clip'
-                id={keyTrigger}
-                ref={(element) => (audioRef.current[index] = element)}
-              >
-                <source src={url} type='audio/mpeg' />
-              </audio>
               <button
                 className='drum-pad'
                 id={keyTrigger}
                 onClick={(e) => playOnClick(index, e)}
               >
+                <audio
+                  className='clip'
+                  id={keyTrigger}
+                  ref={(element) => (audioRef.current[index] = element)}
+                  src={url}
+                ></audio>
                 {keyTrigger}
               </button>
             </div>
