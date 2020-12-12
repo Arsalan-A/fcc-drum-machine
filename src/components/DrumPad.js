@@ -17,10 +17,10 @@ function DrumPad() {
   //Play an Audio file
   const playAudio = (audio) => {
     //Reload the audio when source changes
-    audio.load();
+    // audio.load();
 
-    //reset the audiio play
-    audio.pause();
+    // //reset the audiio play
+    //audio.pause();
     audio.currentTime = 0;
 
     //play the audio
