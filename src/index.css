@@ -104,15 +104,15 @@
 /* SLIDER STYLES */
 .slidecontainer {
   grid-area: volume;
-  min-width: 100%;
+  width: 70%;
 }
 
 .slider {
   position: relative;
   transform: rotate(-90deg);
-  top: 7rem;
+  top: 5rem;
   -webkit-appearance: none;
-  min-width: 70%;
+  min-width: 100%;
   height: 15px;
   border-radius: 10px;
   background: #f3f3f3;
@@ -155,7 +155,7 @@
   }
   .slider {
     top: 4rem;
-    min-width: 70%;
+    min-width: 80%;
   }
 }
 
@@ -164,7 +164,7 @@
     padding: 1.5rem 2rem;
   }
   .slider {
-    min-width: 50%;
+    min-width: 80%;
   }
   #drum-machine {
     grid-template-areas:
@@ -182,6 +182,6 @@
   }
 
   .slider {
-    min-width: 50%;
+    min-width: 80%;
   }
 }

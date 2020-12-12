@@ -21,10 +21,15 @@ function DrumPad() {
 
     // //reset the audiio play
     //audio.pause();
-    audio.currentTime = 0;
+    // audio.currentTime = 0;
 
-    //play the audio
-    audio.play();
+    // //play the audio
+    // audio.play();
+    if (audio.paused) {
+      audio.play();
+    } else {
+      audio.currentTime = 0;
+    }
   };
 
   //Play the audio file on button click
